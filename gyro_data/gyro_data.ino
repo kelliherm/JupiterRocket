@@ -6,6 +6,14 @@
 
 Adafruit_MPU6050 mpu;
 
+float gyro_x;
+float gyro_y;
+float gyro_z;
+
+float gyro_x_offset;
+float gyro_y_offset;
+float gyro_z_offset;
+
 void setup(void) {
   Serial.begin(115200);
   while (!Serial) {
@@ -25,6 +33,8 @@ void setup(void) {
   mpu.setFilterBandwidth(MPU6050_BAND_21_HZ);
   Serial.println("");
   delay(100);
+
+  // Determine the inital offsets of the MPU-6050
 }
 
 void loop() {
@@ -53,5 +63,15 @@ void loop() {
   Serial.print(g.gyro.z);
   Serial.println("");
 
-  delay(10);
+  gyro_x += (g.gyro.x * 0.001);
+  gyro_y += (g.gyro.y * 0.001);
+  gyro_z += ((g.gyro.z + 0.91) * 0.001);
+
+  Serial.print(gyro_x);
+  Serial.print(" , ");
+  Serial.print(gyro_y);
+  Serial.print(" , ");
+  Serial.println(gyro_z);
+
+  delay(1);
 }
